@@ -17,7 +17,7 @@ public class DrawPanel extends JPanel implements ActionListener, ChangeListener,
 	private final String[] optSelectRunner = { "Runner", "Number of Points" };
 
 	private int numPoints;
-	private int runner;
+	private double runner;
 	private boolean go;
 	private long pause;
 	private boolean goRunner;
@@ -37,7 +37,7 @@ public class DrawPanel extends JPanel implements ActionListener, ChangeListener,
 		runner = 0;
 		numPoints = 360;
 		go = false;
-		pause = 1000;
+		pause = 20;
 		goRunner = true;
 
 		startstop = new JButton("Start");
@@ -63,12 +63,12 @@ public class DrawPanel extends JPanel implements ActionListener, ChangeListener,
 		sliderRunner.addChangeListener(this);
 		add(sliderRunner);
 
-		sliderNumPoints = new JSlider(4, 36000, 360);
+		sliderNumPoints = new JSlider(4, 1800, 360);
 		sliderNumPoints.setBounds(1100, 170, 150, 20);
 		sliderNumPoints.addChangeListener(this);
 		add(sliderNumPoints);
 		
-		sliderSleep = new JSlider(1, 10000, 1000);
+		sliderSleep = new JSlider(1, 1000, (int) pause);
 		sliderSleep.setBounds(1100, 200, 150, 20);
 		sliderSleep.addChangeListener(this);
 		add(sliderSleep);
@@ -125,7 +125,7 @@ public class DrawPanel extends JPanel implements ActionListener, ChangeListener,
 		}
 
 		for (double i = 0; i < numPoints; i++) {
-			int destination = (int) ((runner * i) % numPoints);
+			int destination = (int) Math.round(runner * (double) i) % numPoints;
 			int x1 = (int) Math.round(locPoints[(int) i][0]);
 			int y1 = (int) Math.round(locPoints[(int) i][1]);
 			int x2 = (int) Math.round(locPoints[destination][0]);
@@ -152,7 +152,7 @@ public class DrawPanel extends JPanel implements ActionListener, ChangeListener,
 		while (true) {
 			if (go) {
 				if (goRunner) {
-					runner++;
+					runner += 0.01;
 				} else {
 					numPoints++;
 				}
